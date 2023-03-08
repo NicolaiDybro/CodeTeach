@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -24,14 +25,8 @@ public class ListenerClass {
     }
 
     @SubscribeEvent
-    public void bookCLose(TickEvent.PlayerTickEvent event) {
-        Screen screen = Minecraft.getInstance().screen;
-
-        boolean inventory_open_in_tick = screen != null;
-        Player p = event.player;
-        if (inventory_open_in_tick) {
-            p.sendSystemMessage(Component.literal("YES"));
-        }
+    public void bookCLose(PlayerContainerEvent.Close event) {
+        Player p = event.getEntity();
 
     }
 }
