@@ -9,6 +9,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
+import user.nicolai.codeteach.entity.ModBlockEntities;
 import user.nicolai.codeteach.init.BlockInit;
 import user.nicolai.codeteach.init.ContainerInit;
 import user.nicolai.codeteach.init.ItemInit;
@@ -31,6 +32,7 @@ public class CodeTeach {
         BlockInit.BLOCKS.register(modEventBus);
         ItemInit.ITEMS.register(modEventBus);
         ContainerInit.CONTAINERS.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(new ListenerClass());
