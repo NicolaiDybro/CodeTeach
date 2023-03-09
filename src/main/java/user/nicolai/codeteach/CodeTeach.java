@@ -1,26 +1,16 @@
 package user.nicolai.codeteach;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import user.nicolai.codeteach.init.BlockInit;
+import user.nicolai.codeteach.init.ContainerInit;
 import user.nicolai.codeteach.init.ItemInit;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -40,6 +30,7 @@ public class CodeTeach {
 
         BlockInit.BLOCKS.register(modEventBus);
         ItemInit.ITEMS.register(modEventBus);
+        ContainerInit.CONTAINERS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(new ListenerClass());
