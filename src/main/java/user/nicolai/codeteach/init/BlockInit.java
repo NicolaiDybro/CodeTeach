@@ -16,6 +16,4 @@ public class BlockInit {
     public static final RegistryObject<Block> TEACH_BLOCK = BLOCKS.register("teach_block", () -> new TeachBlock(BlockBehaviour.Properties.of(Material.STONE).friction(0.5f)));
 
 
-
-
 }
