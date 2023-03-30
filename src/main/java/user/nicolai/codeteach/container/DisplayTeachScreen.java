@@ -13,12 +13,15 @@ import user.nicolai.codeteach.CodeTeach;
 
 public class DisplayTeachScreen extends AbstractContainerScreen<TeachContainer> {
 
-    public static ResourceLocation TEXTURE = new ResourceLocation(CodeTeach.MODID, "textures/gui/teach_gui.png");
+    public static ResourceLocation TEXTURE = new ResourceLocation(CodeTeach.MODID, "textures/gui/teach_menu.png");
 
     public DisplayTeachScreen(TeachContainer p_97741_, Inventory p_97742_, Component p_97743_) {
         super(p_97741_, p_97742_, p_97743_);
     }
-
+    @Override
+    protected void init() {
+        super.init();
+    }
     @Override
     protected void renderBg(PoseStack poseStack, float ParticalTick, int MouseX, int MouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -30,5 +33,10 @@ public class DisplayTeachScreen extends AbstractContainerScreen<TeachContainer> 
         this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
     }
 
-
+    @Override
+    public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
+        renderBackground(pPoseStack);
+        super.render(pPoseStack, mouseX, mouseY, delta);
+        renderTooltip(pPoseStack, mouseX, mouseY);
+    }
 }

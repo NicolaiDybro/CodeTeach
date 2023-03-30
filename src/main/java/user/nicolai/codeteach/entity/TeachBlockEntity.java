@@ -27,10 +27,10 @@ import user.nicolai.codeteach.container.TeachContainer;
 public class TeachBlockEntity extends BlockEntity implements MenuProvider {
     private final ContainerData data;
     private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
-      @Override
-      protected void onContentsChanged(int slot) {
-          setChanged();
-      }
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
     };
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();

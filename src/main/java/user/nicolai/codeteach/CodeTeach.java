@@ -1,14 +1,19 @@
 package user.nicolai.codeteach;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
+import user.nicolai.codeteach.container.DisplayTeachScreen;
 import user.nicolai.codeteach.entity.ModBlockEntities;
 import user.nicolai.codeteach.init.BlockInit;
 import user.nicolai.codeteach.init.ContainerInit;
@@ -31,8 +36,9 @@ public class CodeTeach {
 
         BlockInit.BLOCKS.register(modEventBus);
         ItemInit.ITEMS.register(modEventBus);
-        ContainerInit.CONTAINERS.register(modEventBus);
+
         ModBlockEntities.register(modEventBus);
+        ContainerInit.CONTAINERS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(new ListenerClass());
@@ -45,5 +51,11 @@ public class CodeTeach {
     }
 
 
-
+    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientModEvents {
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event) {
+            MenuScreens.register(ContainerInit.TEACH_CONTAINER.get(), DisplayTeachScreen::new);
+        }
+    }
 }

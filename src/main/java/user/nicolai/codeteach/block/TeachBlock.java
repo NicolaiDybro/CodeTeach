@@ -49,11 +49,13 @@ public class TeachBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player p, InteractionHand hand, BlockHitResult result) {
         if (hand.equals(InteractionHand.MAIN_HAND)) {
-            BlockEntity entity = p.getLevel().getBlockEntity(pos);
-            if (entity instanceof TeachBlockEntity) {
-                NetworkHooks.openScreen((ServerPlayer) p, (TeachBlockEntity) entity,pos);
-            } else {
-                throw new IllegalStateException("FEJL");
+            if (!level.isClientSide()) {
+                BlockEntity entity = p.getLevel().getBlockEntity(pos);
+                if (entity instanceof TeachBlockEntity) {
+                    NetworkHooks.openScreen((ServerPlayer) p, (TeachBlockEntity) entity, pos);
+                } else {
+                    throw new IllegalStateException("FEJL");
+                }
             }
         }
         return super.use(state, level, pos, p, hand, result);
