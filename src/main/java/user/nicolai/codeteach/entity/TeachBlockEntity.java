@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.StringUtil;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -15,13 +14,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.WorldData;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -31,8 +29,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import user.nicolai.codeteach.container.TeachContainer;
-
-import java.util.ArrayList;
 
 public class TeachBlockEntity extends BlockEntity implements MenuProvider {
     private final ContainerData data;
@@ -126,14 +122,32 @@ public class TeachBlockEntity extends BlockEntity implements MenuProvider {
             ItemStack item = entity.itemHandler.getStackInSlot(0);
             CompoundTag tag = item.getTag();
             ListTag listTag = (ListTag) tag.get("pages");
+            BlockPos pos = blockPos;
             for (Tag page : listTag) {
                 String tekst = StringUtils.removeEnd(page.getAsString().replaceFirst("\\{\"text\":\"", ""), "\"}");
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal(tekst));
-                String[] linjer = tekst.split("\\n");
+                String[] linjer = tekst.split("\\\\n");
+
                 for (String linje : linjer) {
 
+                    if (linje.contains("break-under")) {
+                        level.setBlockAndUpdate(pos.below(), Blocks.AIR.defaultBlockState());
+                    }
+                    if (linje.contains("move-front")) {
+                        level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                        level.setBlockAndUpdate(pos.north(), entity.getBlockState());
+                        pos = pos.north();
+                    }
+                    if (linje.contains("move-back")) {
+                        level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                        level.setBlockAndUpdate(pos.south(), entity.getBlockState());
+                        pos = pos.south();
+                    }
+                    if (linje.contains("move-under")) {
+                        level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                        level.setBlockAndUpdate(pos.below(), entity.getBlockState());
+                        pos = pos.below();
+                    }
                 }
-
             }
         }
     }
