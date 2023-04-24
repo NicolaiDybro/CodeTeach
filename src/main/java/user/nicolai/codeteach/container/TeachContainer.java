@@ -1,6 +1,8 @@
 package user.nicolai.codeteach.container;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -23,13 +25,14 @@ public class TeachContainer extends AbstractContainerMenu{
         this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
 
+    public static TeachContainer teachContainer;
+
     public TeachContainer(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ContainerInit.TEACH_CONTAINER.get(), id);
         checkContainerSize(inv, 3);
         blockEntity = (TeachBlockEntity) entity;
         this.level = inv.player.level;
         this.data = data;
-
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
@@ -89,6 +92,10 @@ public class TeachContainer extends AbstractContainerMenu{
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
                 player, BlockInit.TEACH_BLOCK.get());
     }
+
+
+
+
 
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {

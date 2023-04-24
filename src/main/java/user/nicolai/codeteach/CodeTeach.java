@@ -19,6 +19,8 @@ import user.nicolai.codeteach.init.BlockInit;
 import user.nicolai.codeteach.init.ContainerInit;
 import user.nicolai.codeteach.init.ItemInit;
 
+import static user.nicolai.codeteach.container.TeachContainer.teachContainer;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(CodeTeach.MODID)
 public class CodeTeach {
@@ -31,24 +33,16 @@ public class CodeTeach {
     public CodeTeach() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // Register the commonSetup method for modloading
-        modEventBus.addListener(this::commonSetup);
-
         BlockInit.BLOCKS.register(modEventBus);
         ItemInit.ITEMS.register(modEventBus);
 
         ModBlockEntities.register(modEventBus);
         ContainerInit.CONTAINERS.register(modEventBus);
 
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(new ListenerClass());
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        // Some common setup code
-        LOGGER.info("HELLO FROM COMMON SETUP");
-        LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
-    }
+
 
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)

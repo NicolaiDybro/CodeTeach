@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -106,6 +107,10 @@ public class TeachBlockEntity extends BlockEntity implements MenuProvider {
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
     }
 
+    public TeachBlockEntity getEntity() {
+        return getEntity();
+    }
+
     public void drops() {
         SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
         for (int i = 0; i < itemHandler.getSlots(); i++) {
@@ -114,41 +119,73 @@ public class TeachBlockEntity extends BlockEntity implements MenuProvider {
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 
+
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, TeachBlockEntity entity) {
-        if (!level.isClientSide()) {
-            return;
-        }
         if (entity.itemHandler.getStackInSlot(0).getItem() == Items.WRITTEN_BOOK) {
             ItemStack item = entity.itemHandler.getStackInSlot(0);
             CompoundTag tag = item.getTag();
             ListTag listTag = (ListTag) tag.get("pages");
             BlockPos pos = blockPos;
+
             for (Tag page : listTag) {
                 String tekst = StringUtils.removeEnd(page.getAsString().replaceFirst("\\{\"text\":\"", ""), "\"}");
                 String[] linjer = tekst.split("\\\\n");
 
                 for (String linje : linjer) {
-
-                    if (linje.contains("break-under")) {
-                        level.setBlockAndUpdate(pos.below(), Blocks.AIR.defaultBlockState());
+                    if (linje.contains("break")) {
+                        if (linje.contains("above")) {
+                            level.setBlockAndUpdate(pos.above(), Blocks.AIR.defaultBlockState());
+                        }
+                        if (linje.contains("above")) {
+                            level.setBlockAndUpdate(pos.above(), Blocks.AIR.defaultBlockState());
+                        }
+                        if (linje.contains("north")) {
+                            level.setBlockAndUpdate(pos.north(), Blocks.AIR.defaultBlockState());
+                        }
+                        if (linje.contains("south")) {
+                            level.setBlockAndUpdate(pos.south(), Blocks.AIR.defaultBlockState());
+                        }
+                        if (linje.contains("west")) {
+                            level.setBlockAndUpdate(pos.west(), Blocks.AIR.defaultBlockState());
+                        }
+                        if (linje.contains("east")) {
+                            level.setBlockAndUpdate(pos.east(), Blocks.AIR.defaultBlockState());
+                        }
                     }
-                    if (linje.contains("move-front")) {
-                        level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                    if (linje.contains("move-north")) {
+                        level.removeBlock(entity.getBlockPos(), true);
                         level.setBlockAndUpdate(pos.north(), entity.getBlockState());
+                        TeachBlockEntity teachBlockEntity = (TeachBlockEntity) level.getBlockEntity(pos.north());
+                        teachBlockEntity.itemHandler.setStackInSlot(0, item);
                         pos = pos.north();
                     }
-                    if (linje.contains("move-back")) {
-                        level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                    if (linje.contains("move-south")) {
+                        level.removeBlock(entity.getBlockPos(), true);
                         level.setBlockAndUpdate(pos.south(), entity.getBlockState());
+                        TeachBlockEntity teachBlockEntity = (TeachBlockEntity) level.getBlockEntity(pos.south());
+                        teachBlockEntity.itemHandler.setStackInSlot(0, item);
                         pos = pos.south();
+
                     }
-                    if (linje.contains("move-under")) {
-                        level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                        level.setBlockAndUpdate(pos.below(), entity.getBlockState());
-                        pos = pos.below();
+                    if (linje.contains("move-west")) {
+                        level.removeBlock(entity.getBlockPos(), true);
+                        level.setBlockAndUpdate(pos.west(), entity.getBlockState());
+                        TeachBlockEntity teachBlockEntity = (TeachBlockEntity) level.getBlockEntity(pos.west());
+                        teachBlockEntity.itemHandler.setStackInSlot(0, item);
+                        pos = pos.west();
                     }
+                    if (linje.contains("move-east")) {
+                        level.removeBlock(entity.getBlockPos(), true);
+                        level.setBlockAndUpdate(pos.east(), entity.getBlockState());
+                        TeachBlockEntity teachBlockEntity = (TeachBlockEntity) level.getBlockEntity(pos.east());
+                        teachBlockEntity.itemHandler.setStackInSlot(0, item);
+                        pos = pos.east();
+                    }
+                    level.updateNeighborsAt(pos, blockState.getBlock());
                 }
+
             }
         }
     }
+
 }

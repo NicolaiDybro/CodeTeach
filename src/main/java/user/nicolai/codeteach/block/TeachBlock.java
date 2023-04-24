@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import user.nicolai.codeteach.entity.ModBlockEntities;
 import user.nicolai.codeteach.entity.TeachBlockEntity;
@@ -36,7 +37,7 @@ public class TeachBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+    public void onRemove(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
             if (blockEntity instanceof TeachBlockEntity) {
@@ -47,7 +48,7 @@ public class TeachBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player p, InteractionHand hand, BlockHitResult result) {
+    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player p, InteractionHand hand, BlockHitResult result) {
         if (hand.equals(InteractionHand.MAIN_HAND)) {
             if (!level.isClientSide()) {
                 BlockEntity entity = p.getLevel().getBlockEntity(pos);
@@ -60,6 +61,7 @@ public class TeachBlock extends BaseEntityBlock {
         }
         return super.use(state, level, pos, p, hand, result);
     }
+
 
     @Nullable
     @Override
