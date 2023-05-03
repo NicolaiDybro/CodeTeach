@@ -11,9 +11,10 @@ import user.nicolai.codeteach.block.TeachBlock;
 
 public class BlockInit {
 
+    //Opret liste med alle blocks
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, CodeTeach.MODID);
 
+    //Opret teach block
     public static final RegistryObject<Block> TEACH_BLOCK = BLOCKS.register("teach_block", () -> new TeachBlock(BlockBehaviour.Properties.of(Material.STONE).friction(0.5f)));
-
 
 }

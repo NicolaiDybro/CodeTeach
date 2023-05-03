@@ -25,7 +25,6 @@ public class TeachContainer extends AbstractContainerMenu{
         this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
 
-    public static TeachContainer teachContainer;
 
     public TeachContainer(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ContainerInit.TEACH_CONTAINER.get(), id);
@@ -39,10 +38,10 @@ public class TeachContainer extends AbstractContainerMenu{
         this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
             this.addSlot(new SlotItemHandler(handler, 0, 80, 35));
         });
-
         addDataSlots(data);
     }
 
+    //Kode stykke fra https://github.com/diesieben07/SevenCommons
     private static final int HOTBAR_SLOT_COUNT = 9;
     private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
     private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
