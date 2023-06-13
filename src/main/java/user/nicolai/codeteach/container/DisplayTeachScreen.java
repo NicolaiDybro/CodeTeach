@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 import user.nicolai.codeteach.CodeTeach;
 
 public class DisplayTeachScreen extends AbstractContainerScreen<TeachContainer> {
@@ -32,8 +33,8 @@ public class DisplayTeachScreen extends AbstractContainerScreen<TeachContainer> 
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
-        renderBackground(pPoseStack);
+    public void render(@NotNull PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
+        renderBackground(pPoseStack); //Render teksten over menuen
         super.render(pPoseStack, mouseX, mouseY, delta);
         renderTooltip(pPoseStack, mouseX, mouseY);
     }

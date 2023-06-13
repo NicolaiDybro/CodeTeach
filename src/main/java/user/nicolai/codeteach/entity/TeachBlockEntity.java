@@ -20,12 +20,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import user.nicolai.codeteach.container.TeachContainer;
 
@@ -34,11 +34,12 @@ public class TeachBlockEntity extends BlockEntity implements MenuProvider {
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
-    public TeachBlockEntity(BlockPos pos, BlockState state) { //Opret block entity baseret på dens position og state
-        super(ModBlockEntities.TEACH_BLOCK_ENTITY.get(), pos, state);
-        this.data = new ContainerData() {
+    //TeachBlockEntity constructor
+    public TeachBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.TEACH_BLOCK_ENTITY.get(), pos, state); //Får fat i den entity som er blevet oprettet, position og state
+        this.data = new ContainerData() { //Opretter et nyt datasæt, hvor der kan gemmes information. I starten er det tomt.
             @Override
-            public int get(int p_39284_) { return 0;}
+            public int get(int p_39284_) { return 0;} //
             @Override
             public void set(int p_39285_, int p_39286_) {}
             @Override
@@ -47,50 +48,57 @@ public class TeachBlockEntity extends BlockEntity implements MenuProvider {
             }
         };
     }
+    //ItemHandler styrer de forskellige items. Den opdatere, hvis der bliver ændret noget
     private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
+    //Retunerer navnet på entity
     @Override
     public Component getDisplayName() {
         return Component.literal("Teach Block");
     }
 
+    //Opretter menuen
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new TeachContainer(id, inventory, this, this.data);
     }
 
-
+    //Får fat i capability, hvilket gør det muligt at kombinere med andre modifikationer
     @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return lazyItemHandler.cast();
         }
         return super.getCapability(cap, side);
     }
 
+    //Indlæser itemHandler som lazyItemHandler
     @Override
     public void onLoad() {
         super.onLoad();
         lazyItemHandler = LazyOptional.of(() -> itemHandler);
     }
 
+    //Hvis capability ikke virker, så bliver der givet besked
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
         lazyItemHandler.invalidate();
     }
 
+    //Funktion til at gemme nyt data
     @Override
     protected void saveAdditional(CompoundTag nbt) {
         nbt.put("inventory", itemHandler.serializeNBT());
         super.saveAdditional(nbt);
     }
 
+    //Funktion til at uploade data
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
@@ -98,6 +106,7 @@ public class TeachBlockEntity extends BlockEntity implements MenuProvider {
     }
 
 
+    //Smider de items den har i sit inventar på jorden
     public void drops() {
         SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
         for (int i = 0; i < itemHandler.getSlots(); i++) {
@@ -216,6 +225,7 @@ public class TeachBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
+    //Omskriver string til en blockstate
     public static BlockState getMat(String s)
     {
         s = s.toUpperCase();

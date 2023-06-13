@@ -21,19 +21,21 @@ public class TeachContainer extends AbstractContainerMenu{
     public final TeachBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
+    //Client Container constructor
     public TeachContainer(int id, Inventory inv, FriendlyByteBuf extraData) {
         this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
 
 
+    //Server Container constructor
     public TeachContainer(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ContainerInit.TEACH_CONTAINER.get(), id);
-        checkContainerSize(inv, 3);
-        blockEntity = (TeachBlockEntity) entity;
-        this.level = inv.player.level;
-        this.data = data;
-        addPlayerInventory(inv);
-        addPlayerHotbar(inv);
+        checkContainerSize(inv, 3); //
+        blockEntity = (TeachBlockEntity) entity; //Gemmer den entity vi har med at gøre
+        this.level = inv.player.level; //Gemmer det level spilleren er i
+        this.data = data; //Gemmer data
+        addPlayerInventory(inv); //Tilføjer player inventar
+        addPlayerHotbar(inv); //Tilføjer player hotbar
 
         this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
             this.addSlot(new SlotItemHandler(handler, 0, 80, 35));
@@ -96,6 +98,7 @@ public class TeachContainer extends AbstractContainerMenu{
 
 
 
+    //Tilføjer items til spiller inventar
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
@@ -104,6 +107,7 @@ public class TeachContainer extends AbstractContainerMenu{
         }
     }
 
+    //Tilføjer items til spiller hotbar
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));

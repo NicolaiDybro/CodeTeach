@@ -6,8 +6,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import user.nicolai.codeteach.CodeTeach;
-import user.nicolai.codeteach.block.TeachBlock;
-import user.nicolai.codeteach.entity.TeachBlockEntity;
 import user.nicolai.codeteach.init.BlockInit;
 
 public class ModBlockEntities {

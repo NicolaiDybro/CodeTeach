@@ -14,27 +14,23 @@ import user.nicolai.codeteach.init.ItemInit;
 @Mod(CodeTeach.MODID)
 public class CodeTeach {
 
-    // Define mod id in a common place for everything to reference
+    //Definer MODID baseret på, hvad mod'en hedder
     public static final String MODID = "codeteach";
-    // Directly reference a slf4j logger
 
     public CodeTeach() {
 
-
+        //Får fat i event manager
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        BlockInit.BLOCKS.register(modEventBus); //Register alle bloks til spillet
+        ItemInit.ITEMS.register(modEventBus); //Register alle items til spillet
 
-        BlockInit.BLOCKS.register(modEventBus);
-        ItemInit.ITEMS.register(modEventBus);
-
-        ModBlockEntities.register(modEventBus);
-        ContainerInit.CONTAINERS.register(modEventBus);
+        ModBlockEntities.register(modEventBus); //Register alle blockentities til spillet
+        ContainerInit.CONTAINERS.register(modEventBus); //Register alle containers til spillet
 
     }
 
-
-
-
+    //Opretter skærmen, så snart man kommer ind på spillet
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModEvents {
         @SubscribeEvent
